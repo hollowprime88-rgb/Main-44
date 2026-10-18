@@ -1,0 +1,33 @@
+name: Interactive Machine.dev GPU Terminal
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  interactive-gpu:
+    runs-on: machine/runner=rtx6000-48xl/tenancy=spot
+    timeout-minutes: 24
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Run your startup commands
+        shell: bash
+        run: |
+          set -e
+          nvidia-smi
+          python3 --version
+          # Insert your own allowed workload setup commands below:
+          # python3 -m pip install some-package
+          # python3 your_script.py
+
+      - name: Open interactive browser terminal
+        shell: bash
+        run: |
+          echo 'Open the sshx session URL that appears below.'
+          echo 'Keep this job running to keep the terminal open.'
+          curl -fsSL https://sshx.io/get | sh -s run
